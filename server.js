@@ -47,7 +47,7 @@ const projectRoutes = require('./src/routes/project.routes');
 // using as middleware
 
 
-app.use('/api/v1/project', projectRoutes);
+app.use('/api/project', projectRoutes);
 
 
 //app.use('/api/v1/download', attachmentRoutes);
