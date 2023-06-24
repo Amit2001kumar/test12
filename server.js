@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 
 app.use(cors({
 
-  origin:["http://localhost:4200"],
+  origin:["http://localhost:5000"],
  
  }))
 
