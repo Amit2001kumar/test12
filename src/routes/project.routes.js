@@ -23,6 +23,7 @@ router.put('/:Code', projectController.update);
 // router.get('/:id', projectController.findById);
 router.get('/:Code', projectController.findById);
 
+router.get('/state/:state_id', projectController.findStateById);
 
 
 

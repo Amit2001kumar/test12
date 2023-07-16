@@ -2,7 +2,7 @@ var dbConn = require('./../../config/db.config');
 
 //Employee object create
 var Project = function (project) {
-//     this.employee_id = project.employee_id;
+    //     this.employee_id = project.employee_id;
     this.Code = project.Code;
     this.Name = project.Name;
     this.Address = project.Address;
@@ -28,13 +28,13 @@ Project.create = function (newProject, repository, result) {
 
     for (let i = 0; i < repository.length; i++) {
         repositoryValues.push([
-           newProject.Code,
+            newProject.Code,
             repository[i].Name,
             repository[i].MobileNo,
             repository[i].Email1,
             repository[i].Department,
             repository[i].Designation,
-          
+
         ])
     }
 
@@ -110,14 +110,14 @@ Project.update = function (Code, project, repository, result) {
         ])
     }
 
-    dbConn.query("UPDATE emp_data SET Code=?,Name=?, Address=?,Country=?,State=?,City=?,Pincode=?,MobileNo=?, Email=?,GSTNo=?,PANNo=?,Latitude=?, Longitude=?,Currency=?  WHERE Code= ?", [project.Code, project.Name, project.Address, project.Country, project.State, project.City, project.Pincode, project.MobileNo,project.Email, project.GSTNo,project.PANNo, project.Latitude,project.Longitude, project.Currency, Code],
+    dbConn.query("UPDATE emp_data SET Code=?,Name=?, Address=?,Country=?,State=?,City=?,Pincode=?,MobileNo=?, Email=?,GSTNo=?,PANNo=?,Latitude=?, Longitude=?,Currency=?  WHERE Code= ?", [project.Code, project.Name, project.Address, project.Country, project.State, project.City, project.Pincode, project.MobileNo, project.Email, project.GSTNo, project.PANNo, project.Latitude, project.Longitude, project.Currency, Code],
         function (err, res) {
             if (err)
                 throw err;
             console.log("project of records updated: " + res.affectedRows);
 
             for (let i = 0; i < repository.length; i++) {
-                dbConn.query("UPDATE emp_contact SET Name=?, MobileNo=?, Email1=?, Department=?, Designation=? where Code=?", [repository[i].Name, repository[i].MobileNo, repository[i].Email,repository[i].Department, repository[i].Designation, Code],
+                dbConn.query("UPDATE emp_contact SET Name=?, MobileNo=?, Email1=?, Department=?, Designation=? where Code=?", [repository[i].Name, repository[i].MobileNo, repository[i].Email, repository[i].Department, repository[i].Designation, Code],
                     function (err, res) {
                         if (err) throw err;
                         console.log("repository of records inserted: " + res.affectedRows);
@@ -147,18 +147,45 @@ Project.findAll = function (result) {
 
 
 
+// Project.findById = function (Code, result) {
+//     dbConn.query("SELECT * FROM emp_data inner join emp_contact on emp_data.Code = emp_contact.Code where emp_data.Code = ? ", Code, 
+
+//     function (err, res) {             
+//         if(err) {
+//             console.log("error: ", err);
+//             result(err, null);
+//         }
+//         else{
+//             result(null, res);
+//         }
+//     });   
+// };
+
 Project.findById = function (Code, result) {
-    dbConn.query("SELECT * FROM emp_data inner join emp_contact on emp_data.Code = emp_contact.Code where emp_data.Code = ? ", Code, 
-    
-    function (err, res) {             
-        if(err) {
+    var sql = `call hrms.hrms_sp_get_test_details(?);`;
+    dbConn.query(sql, Code, function (err, res) {
+        if (err) {
             console.log("error: ", err);
             result(err, null);
+        } else {
+            result(null, res[0][0]);
         }
-        else{
-            result(null, res);
-        }
-    });   
+    });
+};
+
+
+Project.findStateById = function (state_id, result) {
+    dbConn.query("SELECT * FROM hrms_new.tbl_states where state_id = ? ", state_id,
+
+        function (err, res) {
+            if (err) {
+                console.log("error: ", err);
+                result(err, null);
+            }
+            else {
+                result(null, res);
+            }
+        });
 };
 
 
